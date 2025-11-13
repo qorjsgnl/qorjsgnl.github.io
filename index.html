@@ -3,97 +3,795 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>배건휘 - 포트폴리오</title>
+    <title>배건휘 | DESIGNER Portfolio</title>
     <style>
+        /* ===== 기본 설정 ===== */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
+        :root {
+            /* 얼스톤 색상 테마 */
+            --primary: #8B7355;
+            --secondary: #C4A77D;
+            --tertiary: #E8DCC4;
+            --background: #F5F0E8;
+            --text-dark: #4A4035;
+            --text-light: #8B7355;
+        }
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
+            color: var(--text-dark);
+            overflow-x: hidden;
+            background: var(--background);
+        }
+
+        /* ===== 네비게이션 ===== */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 20px 50px;
             display: flex;
-            justify-content: center;
+            justify-content: space-between;
             align-items: center;
+            z-index: 1000;
+            background: rgba(245, 240, 232, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
 
-        .container {
-            text-align: center;
-            background: rgba(255, 255, 255, 0.95);
-            padding: 80px 60px;
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            animation: fadeIn 1s ease-in;
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--primary);
+            text-decoration: none;
+            position: relative;
         }
 
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        /* 글리치 에펙트 */
+        .glitch {
+            position: relative;
+            animation: glitch-skew 1s infinite;
         }
 
-        .profile-img {
-            width: 200px;
-            height: 200px;
+        .glitch::before,
+        .glitch::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .glitch::before {
+            left: 2px;
+            text-shadow: -2px 0 var(--secondary);
+            clip: rect(44px, 450px, 56px, 0);
+            animation: glitch-anim 5s infinite linear alternate-reverse;
+        }
+
+        .glitch::after {
+            left: -2px;
+            text-shadow: -2px 0 var(--primary);
+            clip: rect(44px, 450px, 56px, 0);
+            animation: glitch-anim2 5s infinite linear alternate-reverse;
+        }
+
+        @keyframes glitch-anim {
+            0% { clip: rect(10px, 9999px, 31px, 0); }
+            20% { clip: rect(85px, 9999px, 140px, 0); }
+            40% { clip: rect(40px, 9999px, 66px, 0); }
+            60% { clip: rect(65px, 9999px, 90px, 0); }
+            80% { clip: rect(15px, 9999px, 115px, 0); }
+            100% { clip: rect(50px, 9999px, 95px, 0); }
+        }
+
+        @keyframes glitch-anim2 {
+            0% { clip: rect(65px, 9999px, 119px, 0); }
+            20% { clip: rect(35px, 9999px, 85px, 0); }
+            40% { clip: rect(90px, 9999px, 140px, 0); }
+            60% { clip: rect(20px, 9999px, 60px, 0); }
+            80% { clip: rect(70px, 9999px, 130px, 0); }
+            100% { clip: rect(45px, 9999px, 100px, 0); }
+        }
+
+        @keyframes glitch-skew {
+            0% { transform: skew(0deg); }
+            10% { transform: skew(-2deg); }
+            20% { transform: skew(0deg); }
+            30% { transform: skew(1deg); }
+            40% { transform: skew(0deg); }
+            100% { transform: skew(0deg); }
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-light);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        /* ===== 풀스크린 슬라이드 컨테이너 ===== */
+        .slide-container {
+            height: 100vh;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .slide {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 80px 50px 50px;
+            position: relative;
+        }
+
+        /* ===== 슬라이드 네비게이션 ===== */
+        .slide-nav {
+            position: fixed;
+            right: 50px;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .slide-nav-dot {
+            width: 12px;
+            height: 12px;
             border-radius: 50%;
-            object-fit: cover;
-            margin-bottom: 30px;
-            border: 5px solid white;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            background: var(--tertiary);
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid var(--secondary);
         }
 
-        h1 {
-            font-size: 4rem;
-            color: #2d3748;
-            margin-bottom: 30px;
-            font-weight: 700;
-            letter-spacing: -2px;
+        .slide-nav-dot.active {
+            background: var(--primary);
+            transform: scale(1.3);
         }
 
-        .welcome {
-            font-size: 1.3rem;
-            color: #718096;
-            line-height: 1.6;
+        /* ===== 히어로 섹션 ===== */
+        .hero {
+            text-align: center;
+            max-width: 800px;
+        }
+
+        .hero h1 {
+            font-size: 80px;
+            margin-bottom: 20px;
+            color: var(--primary);
+        }
+
+        .hero .subtitle {
+            font-size: 32px;
+            color: var(--secondary);
+            margin-bottom: 15px;
+            letter-spacing: 8px;
             font-weight: 300;
         }
 
-        .divider {
-            width: 80px;
-            height: 4px;
-            background: linear-gradient(90deg, #667eea, #764ba2);
-            margin: 25px auto;
-            border-radius: 2px;
+        .hero .intro {
+            font-size: 20px;
+            color: var(--text-light);
+            margin-top: 30px;
         }
 
+        /* ===== About 섹션 ===== */
+        .about-content {
+            display: flex;
+            align-items: center;
+            gap: 60px;
+            max-width: 1200px;
+        }
+
+        .about-image {
+            flex: 0 0 300px;
+        }
+
+        .about-image img {
+            width: 100%;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(139, 115, 85, 0.2);
+        }
+
+        .about-text {
+            flex: 1;
+        }
+
+        .about-text h2 {
+            font-size: 48px;
+            color: var(--primary);
+            margin-bottom: 30px;
+        }
+
+        .about-text p {
+            font-size: 18px;
+            line-height: 1.8;
+            color: var(--text-light);
+            margin-bottom: 20px;
+        }
+
+        /* ===== Skills 섹션 ===== */
+        .skills-content {
+            max-width: 1000px;
+            text-align: center;
+        }
+
+        .skills-content h2 {
+            font-size: 48px;
+            color: var(--primary);
+            margin-bottom: 50px;
+        }
+
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .skill-item {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(139, 115, 85, 0.1);
+            transition: transform 0.3s;
+        }
+
+        .skill-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(139, 115, 85, 0.2);
+        }
+
+        .skill-item h3 {
+            color: var(--primary);
+            margin-bottom: 10px;
+            font-size: 20px;
+        }
+
+        .skill-item p {
+            color: var(--text-light);
+            font-size: 14px;
+        }
+
+        /* ===== Projects 섹션 (각 프로젝트를 풀스크린으로) ===== */
+        .project-slide {
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+
+        .project-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(139, 115, 85, 0.85);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .project-content {
+            max-width: 800px;
+            text-align: center;
+            color: white;
+            padding: 40px;
+        }
+
+        .project-content h2 {
+            font-size: 56px;
+            margin-bottom: 20px;
+        }
+
+        .project-content .project-type {
+            font-size: 20px;
+            color: var(--tertiary);
+            margin-bottom: 30px;
+            letter-spacing: 3px;
+        }
+
+        .project-content p {
+            font-size: 18px;
+            line-height: 1.8;
+            margin-bottom: 30px;
+        }
+
+        .project-link {
+            display: inline-block;
+            padding: 15px 40px;
+            background: var(--background);
+            color: var(--primary);
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .project-link:hover {
+            background: white;
+            transform: scale(1.05);
+        }
+
+        /* ===== Contact 섹션 ===== */
+        .contact-content {
+            max-width: 800px;
+            text-align: center;
+        }
+
+        .contact-content h2 {
+            font-size: 48px;
+            color: var(--primary);
+            margin-bottom: 30px;
+        }
+
+        .contact-content p {
+            font-size: 20px;
+            color: var(--text-light);
+            margin-bottom: 50px;
+        }
+
+        .contact-info {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .contact-item {
+            font-size: 24px;
+            color: var(--primary);
+        }
+
+        .contact-item a {
+            color: var(--secondary);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .contact-item a:hover {
+            color: var(--primary);
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .social-links a {
+            display: inline-block;
+            width: 50px;
+            height: 50px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .social-links a:hover {
+            background: var(--secondary);
+            transform: scale(1.1);
+        }
+
+        /* ===== Footer ===== */
+        footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            padding: 20px;
+            text-align: center;
+            background: rgba(245, 240, 232, 0.95);
+            color: var(--text-light);
+            font-size: 14px;
+            z-index: 999;
+        }
+
+        footer a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* ===== 화살표 네비게이션 ===== */
+        .arrow-nav {
+            position: fixed;
+            bottom: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 20px;
+            z-index: 100;
+        }
+
+        .arrow-btn {
+            width: 50px;
+            height: 50px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 20px;
+            transition: all 0.3s;
+        }
+
+        .arrow-btn:hover {
+            background: var(--secondary);
+            transform: scale(1.1);
+        }
+
+        .arrow-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        /* ===== 반응형 디자인 ===== */
         @media (max-width: 768px) {
-            .container {
-                padding: 60px 40px;
+            nav {
+                padding: 15px 20px;
             }
-            
-            h1 {
-                font-size: 2.5rem;
+
+            .logo {
+                font-size: 20px;
             }
-            
-            .welcome {
-                font-size: 1.1rem;
+
+            .nav-links {
+                display: none;
+            }
+
+            .slide {
+                padding: 80px 20px 50px;
+            }
+
+            .hero h1 {
+                font-size: 48px;
+            }
+
+            .hero .subtitle {
+                font-size: 20px;
+                letter-spacing: 4px;
+            }
+
+            .hero .intro {
+                font-size: 16px;
+            }
+
+            .about-content {
+                flex-direction: column;
+                gap: 30px;
+            }
+
+            .about-image {
+                flex: 0 0 200px;
+            }
+
+            .about-text h2,
+            .skills-content h2,
+            .contact-content h2 {
+                font-size: 36px;
+            }
+
+            .project-content h2 {
+                font-size: 36px;
+            }
+
+            .skills-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .slide-nav {
+                right: 20px;
+            }
+
+            .arrow-nav {
+                bottom: 70px;
             }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <img src="images/profile.jpg" alt="배건휘 프로필" class="profile-img">
-        <h1>배건휘</h1>
-        <div class="divider"></div>
-        <p class="welcome">포트폴리오 웹사이트에 오신 것을 환영합니다</p>
+    <!-- 네비게이션 -->
+    <nav>
+        <a href="#" class="logo glitch" data-text="배건휘">배건휘</a>
+        <ul class="nav-links">
+            <li><a href="#" onclick="goToSlide(0)">Home</a></li>
+            <li><a href="#" onclick="goToSlide(1)">About</a></li>
+            <li><a href="#" onclick="goToSlide(2)">Skills</a></li>
+            <li><a href="#" onclick="goToSlide(3)">Projects</a></li>
+            <li><a href="#" onclick="goToSlide(6)">Contact</a></li>
+        </ul>
+    </nav>
+
+    <!-- 슬라이드 네비게이션 -->
+    <div class="slide-nav" id="slideNav"></div>
+
+    <!-- 화살표 네비게이션 -->
+    <div class="arrow-nav">
+        <button class="arrow-btn" id="prevBtn" onclick="prevSlide()">←</button>
+        <button class="arrow-btn" id="nextBtn" onclick="nextSlide()">→</button>
     </div>
+
+    <!-- 슬라이드 컨테이너 -->
+    <div class="slide-container" id="slideContainer">
+        
+        <!-- 슬라이드 1: 히어로 섹션 -->
+        <div class="slide" style="background: linear-gradient(135deg, var(--background) 0%, var(--tertiary) 100%);">
+            <div class="hero">
+                <h1 class="glitch" data-text="배건휘">배건휘</h1>
+                <div class="subtitle">DESIGNER</div>
+                <p class="intro">안녕하세요 배건휘입니다요</p>
+            </div>
+        </div>
+
+        <!-- 슬라이드 2: About Me -->
+        <div class="slide" style="background: var(--background);">
+            <div class="about-content">
+                <div class="about-image">
+                    <img src="https://via.placeholder.com/300x400/8B7355/FFFFFF?text=Profile" alt="배건휘">
+                </div>
+                <div class="about-text">
+                    <h2 class="glitch" data-text="About Me">About Me</h2>
+                    <p>안녕하세요, 디자이너 배건휘입니다.</p>
+                    <p>창의적인 비주얼 디자인과 사용자 경험을 결합하여 의미 있는 디자인 솔루션을 만들어냅니다. 
+                    브랜드 아이덴티티부터 디지털 인터페이스까지, 다양한 프로젝트를 통해 디자인의 가능성을 탐구하고 있습니다.</p>
+                    <p>디자인을 통해 사람들에게 긍정적인 영향을 주는 것이 제 목표입니다.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 슬라이드 3: Skills -->
+        <div class="slide" style="background: linear-gradient(135deg, var(--tertiary) 0%, var(--background) 100%);">
+            <div class="skills-content">
+                <h2 class="glitch" data-text="Skills">Skills</h2>
+                <div class="skills-grid">
+                    <div class="skill-item">
+                        <h3>브랜드 디자인</h3>
+                        <p>로고, 아이덴티티 시스템</p>
+                    </div>
+                    <div class="skill-item">
+                        <h3>UI/UX 디자인</h3>
+                        <p>웹 & 앱 인터페이스</p>
+                    </div>
+                    <div class="skill-item">
+                        <h3>그래픽 디자인</h3>
+                        <p>포스터, 패키지, 편집</p>
+                    </div>
+                    <div class="skill-item">
+                        <h3>일러스트레이션</h3>
+                        <p>디지털 드로잉 & 아트워크</p>
+                    </div>
+                    <div class="skill-item">
+                        <h3>모션 그래픽</h3>
+                        <p>애니메이션 & 비디오</p>
+                    </div>
+                    <div class="skill-item">
+                        <h3>프로토타이핑</h3>
+                        <p>인터랙티브 프로토타입</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 슬라이드 4: Project 1 -->
+        <div class="slide project-slide" style="background-image: url('https://via.placeholder.com/1920x1080/8B7355/FFFFFF?text=Project+1');">
+            <div class="project-overlay">
+                <div class="project-content">
+                    <h2 class="glitch" data-text="Brand Identity">Brand Identity</h2>
+                    <div class="project-type">BRANDING</div>
+                    <p>친환경 라이프스타일 브랜드의 전체 아이덴티티 시스템을 구축했습니다. 
+                    자연스러운 색상과 유기적인 형태를 통해 브랜드의 철학을 시각적으로 표현했습니다.</p>
+                    <a href="#" class="project-link">View Project</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- 슬라이드 5: Project 2 -->
+        <div class="slide project-slide" style="background-image: url('https://via.placeholder.com/1920x1080/C4A77D/FFFFFF?text=Project+2');">
+            <div class="project-overlay">
+                <div class="project-content">
+                    <h2 class="glitch" data-text="Mobile App Design">Mobile App Design</h2>
+                    <div class="project-type">UI/UX</div>
+                    <p>건강 관리 앱의 사용자 인터페이스와 경험을 디자인했습니다. 
+                    직관적인 네비게이션과 따뜻한 색상으로 사용자가 편안하게 앱을 사용할 수 있도록 했습니다.</p>
+                    <a href="#" class="project-link">View Project</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- 슬라이드 6: Project 3 -->
+        <div class="slide project-slide" style="background-image: url('https://via.placeholder.com/1920x1080/E8DCC4/8B7355?text=Project+3');">
+            <div class="project-overlay">
+                <div class="project-content">
+                    <h2 class="glitch" data-text="Poster Series">Poster Series</h2>
+                    <div class="project-type">GRAPHIC DESIGN</div>
+                    <p>문화 행사를 위한 포스터 시리즈를 제작했습니다. 
+                    실험적인 타이포그래피와 글리치 효과를 활용하여 현대적이고 역동적인 비주얼을 완성했습니다.</p>
+                    <a href="#" class="project-link">View Project</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- 슬라이드 7: Contact -->
+        <div class="slide" style="background: linear-gradient(135deg, var(--background) 0%, var(--tertiary) 100%);">
+            <div class="contact-content">
+                <h2 class="glitch" data-text="Get In Touch">Get In Touch</h2>
+                <p>프로젝트 문의나 협업 제안을 환영합니다</p>
+                <div class="contact-info">
+                    <div class="contact-item">
+                        📧 <a href="mailto:baegeonhwi@example.com">baegeonhwi@example.com</a>
+                    </div>
+                    <div class="contact-item">
+                        📱 <a href="tel:+821012345678">010-1234-5678</a>
+                    </div>
+                </div>
+                <div class="social-links">
+                    <a href="#" title="Instagram">📷</a>
+                    <a href="#" title="Behance">🎨</a>
+                    <a href="#" title="LinkedIn">💼</a>
+                    <a href="#" title="GitHub">💻</a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        © 2025 배건휘. Powered by <a href="https://ai.triz.kr" target="_blank">AI Portfolio Workshop</a>.
+    </footer>
+
+    <script>
+        // ===== 슬라이드 기능 =====
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+        const slideContainer = document.getElementById('slideContainer');
+        const slideNav = document.getElementById('slideNav');
+
+        // 슬라이드 네비게이션 점 생성
+        for (let i = 0; i < totalSlides; i++) {
+            const dot = document.createElement('div');
+            dot.className = 'slide-nav-dot';
+            if (i === 0) dot.classList.add('active');
+            dot.addEventListener('click', () => goToSlide(i));
+            slideNav.appendChild(dot);
+        }
+
+        const navDots = document.querySelectorAll('.slide-nav-dot');
+
+        // 슬라이드 이동 함수
+        function goToSlide(index) {
+            if (index < 0 || index >= totalSlides) return;
+            
+            currentSlide = index;
+            slideContainer.style.transform = `translateY(-${currentSlide * 100}vh)`;
+            slideContainer.style.transition = 'transform 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55)';
+            
+            // 네비게이션 점 업데이트
+            navDots.forEach((dot, i) => {
+                dot.classList.toggle('active', i === currentSlide);
+            });
+            
+            // 화살표 버튼 상태 업데이트
+            updateArrowButtons();
+        }
+
+        // 다음 슬라이드
+        function nextSlide() {
+            if (currentSlide < totalSlides - 1) {
+                goToSlide(currentSlide + 1);
+            }
+        }
+
+        // 이전 슬라이드
+        function prevSlide() {
+            if (currentSlide > 0) {
+                goToSlide(currentSlide - 1);
+            }
+        }
+
+        // 화살표 버튼 상태 업데이트
+        function updateArrowButtons() {
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            
+            prevBtn.disabled = currentSlide === 0;
+            nextBtn.disabled = currentSlide === totalSlides - 1;
+        }
+
+        // 마우스 휠로 슬라이드 이동
+        let isScrolling = false;
+        window.addEventListener('wheel', (e) => {
+            if (isScrolling) return;
+            
+            isScrolling = true;
+            setTimeout(() => { isScrolling = false; }, 1000);
+            
+            if (e.deltaY > 0) {
+                nextSlide();
+            } else {
+                prevSlide();
+            }
+        });
+
+        // 터치 스와이프로 슬라이드 이동
+        let touchStartY = 0;
+        let touchEndY = 0;
+
+        slideContainer.addEventListener('touchstart', (e) => {
+            touchStartY = e.changedTouches[0].screenY;
+        });
+
+        slideContainer.addEventListener('touchend', (e) => {
+            touchEndY = e.changedTouches[0].screenY;
+            handleSwipe();
+        });
+
+        function handleSwipe() {
+            if (touchStartY - touchEndY > 50) {
+                nextSlide();
+            } else if (touchEndY - touchStartY > 50) {
+                prevSlide();
+            }
+        }
+
+        // 키보드 네비게이션
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
+                nextSlide();
+            } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
+                prevSlide();
+            }
+        });
+
+        // 초기 화살표 버튼 상태 설정
+        updateArrowButtons();
+
+        // 글리치 효과 강화 (랜덤 트리거)
+        setInterval(() => {
+            const glitchElements = document.querySelectorAll('.glitch');
+            glitchElements.forEach(el => {
+                if (Math.random() > 0.7) {
+                    el.style.animation = 'none';
+                    setTimeout(() => {
+                        el.style.animation = 'glitch-skew 1s infinite';
+                    }, 10);
+                }
+            });
+        }, 3000);
+    </script>
 </body>
 </html>
